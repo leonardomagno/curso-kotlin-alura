@@ -3,6 +3,7 @@ package br.com.alura.financask.ui.activity
 import alura.com.financask.R
 import alura.com.financask.model.Tipo
 import alura.com.financask.model.Transacao
+import alura.com.financask.ui.ResumoView
 import alura.com.financask.ui.adapter.ListaTransacoesAdapter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,18 @@ class ListaTransacoesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lista_transacoes)
 
         val transacoes: List<Transacao> = transacoesDeExemplo()
+
+        configuraResumo(transacoes)
+
         configuraLista(transacoes)
+    }
+
+    private fun configuraResumo(transacoes: List<Transacao>) {
+        val view = window.decorView
+        val resumoView = ResumoView(view, transacoes)
+        resumoView.adicionaReceita()
+        resumoView.adicionaDespesa()
+        resumoView.adicionaTotal()
     }
 
     private fun configuraLista(transacoes: List<Transacao>) {

@@ -1,28 +1,54 @@
 package alura.com.financask.ui
 
+import alura.com.financask.R
 import alura.com.financask.extensions.formataParaBrasileiro
 import alura.com.financask.model.Resumo
 import alura.com.financask.model.Transacao
+import android.content.Context
 import android.view.View
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.resumo_card.view.*
+import java.math.BigDecimal
 
-class ResumoView(private val view: View,
+class ResumoView(private val context: Context,
+                 private val view: View,
                  transacoes: List<Transacao>) {
 
     private val resumo: Resumo = Resumo(transacoes)
+    private val corReceita = ContextCompat.getColor(context, R.color.receita)
+    private val corDespesa = ContextCompat.getColor(context, R.color.despesa)
 
     fun adicionaReceita() {
         val totalReceita = resumo.receita()
-        view.resumo_card_receita.text = totalReceita.formataParaBrasileiro()
+        with(view.resumo_card_receita) {
+            text = totalReceita.formataParaBrasileiro()
+            setTextColor(corReceita)
+        }
     }
 
     fun adicionaDespesa() {
         val totalDespesa = resumo.despesa()
-        view.resumo_card_despesa.text = totalDespesa.formataParaBrasileiro()
+        with(view.resumo_card_despesa) {
+            text = totalDespesa.formataParaBrasileiro()
+            setTextColor(corDespesa)
+        }
     }
 
     fun adicionaTotal() {
         val total = resumo.total()
-        view.resumo_card_total.text = total.formataParaBrasileiro()
+        val cor = corPor(total)
+        with(view.resumo_card_total) {
+            setTextColor(cor)
+            text = total.formataParaBrasileiro()
+        }
     }
+
+    private fun corPor(valor: BigDecimal): Int {
+        if (valor >= BigDecimal.ZERO) {
+           return corReceita
+        }
+        return corDespesa
+    }
+
+
 }

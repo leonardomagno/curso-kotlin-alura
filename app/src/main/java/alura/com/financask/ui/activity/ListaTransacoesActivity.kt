@@ -7,6 +7,7 @@ import alura.com.financask.model.Transacao
 import alura.com.financask.ui.ResumoView
 import alura.com.financask.ui.adapter.ListaTransacoesAdapter
 import alura.com.financask.ui.dialog.AdicionaTransacaoDialog
+import alura.com.financask.ui.dialog.AlteraTransacaoDialog
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -39,14 +40,14 @@ class ListaTransacoesActivity : AppCompatActivity() {
         AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
             .chama(tipo, object : TransacaoDelegate {
                 override fun delegate(transacao: Transacao) {
-                    atualizaTransacoes(transacao)
+                    transacoes.add(transacao)
+                    atualizaTransacoes()
                     lista_transacoes_adiciona_menu.close(true)
                 }
             })
     }
 
-    private fun atualizaTransacoes(transacao: Transacao) {
-        transacoes.add(transacao)
+    private fun atualizaTransacoes() {
         configuraLista()
         configuraResumo()
     }
@@ -59,5 +60,15 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun configuraLista() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
+        lista_transacoes_listview.setOnItemClickListener { parent, view, position, id ->
+            val transacao = transacoes[position]
+            AlteraTransacaoDialog(window.decorView as ViewGroup, this)
+                .chama(transacao, object : TransacaoDelegate {
+                    override fun delegate(transacao: Transacao) {
+                        transacoes[position] = transacao
+                        atualizaTransacoes()
+                    }
+                })
+        }
     }
 }

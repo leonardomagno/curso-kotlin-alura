@@ -1,7 +1,6 @@
 package alura.com.financask.ui.dialog
 
 import alura.com.financask.R
-import alura.com.financask.delegate.TransacaoDelegate
 import alura.com.financask.extensions.formataParaBrasileiro
 import alura.com.financask.model.Tipo
 import alura.com.financask.model.Transacao
@@ -16,10 +15,10 @@ class AlteraTransacaoDialog(
     override val tituloBotaoPositivo: String
         get() = "Altera"
 
-    fun chama(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
+    fun chama(transacao: Transacao, delegate: (transacao: Transacao) -> Unit) {
         val tipo = transacao.tipo
 
-        super.chama(tipo, transacaoDelegate)
+        super.chama(tipo, delegate)
 
         inicializaCampos(transacao)
     }

@@ -1,7 +1,6 @@
 package br.com.alura.financask.ui.activity
 
 import alura.com.financask.R
-import alura.com.financask.delegate.TransacaoDelegate
 import alura.com.financask.model.Tipo
 import alura.com.financask.model.Transacao
 import alura.com.financask.ui.ResumoView
@@ -9,7 +8,6 @@ import alura.com.financask.ui.adapter.ListaTransacoesAdapter
 import alura.com.financask.ui.dialog.AdicionaTransacaoDialog
 import alura.com.financask.ui.dialog.AlteraTransacaoDialog
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
@@ -42,12 +40,10 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun chamaDialogDeAdicao(tipo: Tipo) {
         AdicionaTransacaoDialog(viewGroupDaActivity, this)
-            .chama(tipo, object : TransacaoDelegate {
-                override fun delegate(transacao: Transacao) {
-                    adiciona(transacao)
-                    lista_transacoes_adiciona_menu.close(true)
-                }
-            })
+            .chama(tipo) { transacaoCriada ->
+                adiciona(transacaoCriada)
+                lista_transacoes_adiciona_menu.close(true)
+            }
     }
 
     private fun adiciona(transacao: Transacao) {
@@ -81,11 +77,9 @@ class ListaTransacoesActivity : AppCompatActivity() {
         position: Int
     ) {
         AlteraTransacaoDialog(viewGroupDaActivity, this)
-            .chama(transacao, object : TransacaoDelegate {
-                override fun delegate(transacao: Transacao) {
-                    altera(transacao, position)
-                }
-            })
+            .chama(transacao) { transacaoAlterada ->
+                altera(transacaoAlterada, position)
+            }
     }
 
     private fun altera(transacao: Transacao, position: Int) {

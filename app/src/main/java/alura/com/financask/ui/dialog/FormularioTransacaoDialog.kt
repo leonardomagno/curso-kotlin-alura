@@ -1,7 +1,6 @@
 package alura.com.financask.ui.dialog
 
 import alura.com.financask.R
-import alura.com.financask.delegate.TransacaoDelegate
 import alura.com.financask.extensions.converteParaCalendar
 import alura.com.financask.extensions.formataParaBrasileiro
 import alura.com.financask.model.Tipo
@@ -31,13 +30,13 @@ abstract class FormularioTransacaoDialog(
 
     protected abstract val tituloBotaoPositivo: String
 
-    fun chama(tipo: Tipo, transacaoDelegate: TransacaoDelegate) {
+    fun chama(tipo: Tipo, delegate: (transacao: Transacao) -> Unit) {
         configuraCampoData()
         configuraCampoCategoria(tipo)
-        configuraFormulario(tipo, transacaoDelegate)
+        configuraFormulario(tipo, delegate)
     }
 
-    private fun configuraFormulario(tipo: Tipo, transacaoDelegate: TransacaoDelegate) {
+    private fun configuraFormulario(tipo: Tipo, delegate: (transacao: Transacao) -> Unit) {
 
         val titulo = tituloPor(tipo)
 
@@ -60,7 +59,7 @@ abstract class FormularioTransacaoDialog(
                             categoria = categoriaEmTexto
                     )
 
-                    transacaoDelegate.delegate(transacaoCriada)
+                    delegate(transacaoCriada)
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()

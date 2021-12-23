@@ -1,6 +1,7 @@
 package br.com.alura.financask.ui.activity
 
 import alura.com.financask.R
+import alura.com.financask.dao.TransacaoDAO
 import alura.com.financask.model.Tipo
 import alura.com.financask.model.Transacao
 import alura.com.financask.ui.ResumoView
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 
 class ListaTransacoesActivity : AppCompatActivity() {
 
-    private val transacoes: MutableList<Transacao> = mutableListOf()
+    private val dao = TransacaoDAO()
+    private val transacoes = dao.transacoes
     private val viewDaActivity by lazy { window.decorView }
     private val viewGroupDaActivity by lazy { viewDaActivity as ViewGroup }
 
@@ -50,7 +52,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun adiciona(transacao: Transacao) {
-        transacoes.add(transacao)
+        dao.adiciona(transacao)
         atualizaTransacoes()
     }
 
@@ -90,7 +92,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun remove(posicao: Int) {
-        transacoes.removeAt(posicao)
+        dao.remove(posicao)
         atualizaTransacoes()
     }
 
@@ -104,8 +106,8 @@ class ListaTransacoesActivity : AppCompatActivity() {
             }
     }
 
-    private fun altera(transacao: Transacao, position: Int) {
-        transacoes[position] = transacao
+    private fun altera(transacao: Transacao, posicao: Int) {
+        dao.altera(transacao, posicao)
         atualizaTransacoes()
     }
 }
